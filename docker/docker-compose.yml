@@ -6,7 +6,7 @@ volumes:
 services:
   mysql:
     build: ./mysql-db
-    image: mysql-db-img:sqlite-db
+    image: mysql-db-img:mysql-db
     container_name: mysql-db-container
     environment:
       MYSQL_ROOT_PASSWORD: root

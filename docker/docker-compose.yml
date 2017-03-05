@@ -1,0 +1,40 @@
+version: "3.0"
+
+volumes:
+  mysql-db:
+
+services:
+  mysql:
+    build: ./mysql-db
+    image: mysql-db-img:sqlite-db
+    container_name: mysql-db-container
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: buildlights
+    volumes:
+      - mysql-db:/var/lib/mysql
+    ports:
+      - "3306:3306"
+
+  mqtt:
+    image: ncarlier/mqtt
+    container_name: mqtt-container
+    ports:
+      - "1883:1883"
+
+  web:
+    image: node-red-app-img:node-red-app
+    container_name: node-red-app-container
+    build:
+      context: ./node-red-app
+      args:
+        - GIT_CLONE_URL
+        - PORT_TO_EXPOSE
+    ports:
+      - "$PORT_TO_EXPOSE:$PORT_TO_EXPOSE"
+    links:
+      - mqtt
+      - mysql
+    depends_on:
+      - mqtt
+      - mysql

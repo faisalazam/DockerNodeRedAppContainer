@@ -1,12 +1,11 @@
 FROM ubuntu:16.10
 
-RUN apt-get -y update
-RUN apt-get install -y \
-                    git \
-                    npm \
-                    nodejs \
-                    mosquitto \
-                    mosquitto-clients
+RUN apt-get -y update \
+    && apt-get install -y \
+                        git \
+                        npm \
+                        nodejs \
+    && apt-get clean
 
 RUN ln -s /usr/bin/nodejs /usr/bin/node
 
@@ -39,6 +38,8 @@ RUN case ${PORT_TO_EXPOSE-} in '') \
     esac
 RUN git clone --depth 1 --branch stable $GIT_CLONE_URL $GIT_CLONE_LOCATION
 RUN npm -C $GIT_CLONE_LOCATION install
+
+VOLUME $GIT_CLONE_LOCATION/node_modules
 
 EXPOSE $PORT_TO_EXPOSE
 

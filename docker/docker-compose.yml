@@ -30,6 +30,8 @@ services:
       args:
         - GIT_CLONE_URL
         - PORT_TO_EXPOSE
+    environment:
+      - UPDATE_APP
     ports:
       - "$PORT_TO_EXPOSE:$PORT_TO_EXPOSE"
     links:

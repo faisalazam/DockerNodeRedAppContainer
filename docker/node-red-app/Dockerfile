@@ -28,18 +28,14 @@ ADD $CONTAINER_STARTUP_SH $USER_DIR/
 RUN chmod +x $USER_DIR/$CONTAINER_STARTUP_SH
 
 USER $USER_NAME
-RUN case ${GIT_CLONE_URL-} in '') \
-        echo "$0: Kindly specify Git clone url using --build-arg GIT_CLONE_URL='http://your-git-repo'" >&2; \
-        exit 1;; \
-    esac
 RUN case ${PORT_TO_EXPOSE-} in '') \
         echo "$0: Kindly specify port to expose using --build-arg PORT_TO_EXPOSE=PORT_NUMBER." >&2; \
         exit 1;; \
     esac
-RUN git clone --depth 1 --branch stable $GIT_CLONE_URL $GIT_CLONE_LOCATION
-RUN npm -C $GIT_CLONE_LOCATION install
 
-VOLUME $GIT_CLONE_LOCATION/node_modules
+RUN mkdir -p $GIT_CLONE_LOCATION
+
+VOLUME $GIT_CLONE_LOCATION
 
 EXPOSE $PORT_TO_EXPOSE
 

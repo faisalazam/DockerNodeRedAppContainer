@@ -28,10 +28,10 @@ services:
     build:
       context: ./node-red-app
       args:
-        - GIT_CLONE_URL
         - PORT_TO_EXPOSE
     environment:
       - UPDATE_APP
+      - GIT_CLONE_URL
     ports:
       - "$PORT_TO_EXPOSE:$PORT_TO_EXPOSE"
     links:

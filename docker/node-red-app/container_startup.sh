@@ -23,7 +23,7 @@ fi
 
 if "${UPDATE_APP:-false}"; then
     echo "Updating the app..."
-    if ! git -C ${GIT_CLONE_LOCATION} fetch origin "+refs/tags/stable:refs/tags/stable"; then
+    if ! git -C ${GIT_CLONE_LOCATION} fetch origin "+refs/tags/stable:refs/tags/stable" && git -C ${GIT_CLONE_LOCATION} checkout -f refs/tags/stable; then
         echo "[ERROR] The app has NOT been updated..."
         exit 1;
     else

@@ -31,7 +31,27 @@ if "${UPDATE_APP:-false}"; then
     fi
 fi
 
-npm -C ${GIT_CLONE_LOCATION} install
+if [ -f ${GIT_CLONE_LOCATION}/package.json ]; then
+    echo "Installing node module dependencies..."
+    if ! npm -C ${GIT_CLONE_LOCATION} install; then
+        echo "[ERROR] The node module dependencies have NOT been updated..."
+        exit 1;
+    else
+        echo "The node module dependencies have been updated..."
+    fi
+fi
+
+if [ -f ${GIT_CLONE_LOCATION}/web/bower.json ]; then
+    echo "Installing bower dependencies..."
+    cd ${GIT_CLONE_LOCATION}/web
+    if ! ../node_modules/bower/bin/bower install -F; then
+        echo "[ERROR] The bower dependencies have NOT been updated..."
+        exit 1;
+    else
+        echo "The bower dependencies have been updated..."
+    fi
+    cd -
+fi
 
 if [ -f ${GIT_CLONE_LOCATION}/config/database.json ] && [ -d ${GIT_CLONE_LOCATION}/migrations ]; then
     echo "Applying database migrations..."
